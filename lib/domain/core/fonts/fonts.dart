@@ -7,6 +7,11 @@ class AppFonts {
     fontSize: 16,
     fontWeight: FontWeight.w500,
   );
+  TextStyle nornalTextWt = TextStyle(
+    color: AppColors().white,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
   TextStyle bigTextBlack = TextStyle(
     color: AppColors().black,
     fontWeight: FontWeight.w800,
@@ -23,6 +28,10 @@ class AppFonts {
   );
   TextStyle smallTextBlack14 = TextStyle(
     color: AppColors().black,
+    fontSize: 14,
+  );
+   TextStyle smallTextOrange14 = TextStyle(
+    color: AppColors().orange,
     fontSize: 14,
   );
   TextStyle smallTextBlack12 = TextStyle(

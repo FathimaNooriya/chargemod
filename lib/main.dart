@@ -2,7 +2,8 @@ import 'package:fathima/application/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'application/business_logic/bloc/on_boarding_bloc.dart';
+import 'application/business_logic/bloc/on_boarding/on_boarding_bloc.dart';
+import 'application/business_logic/signin_bloc/bloc/sign_in_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => OnBoardingBloc()),
+        BlocProvider(create: (context) => SignInBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

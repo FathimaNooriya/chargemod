@@ -3,7 +3,7 @@ class ApiEndPoints {
       'https://as-uat.console.chargemod.com/temporary/sde1flutterATSR';
   static String organizationId = '/64941897fdb322dbf94ad2b8';
   static String projectId = '/6494141957d29409895704d2';
-  static String inventoryStock = '/1.0.0';
+  static String appVersion = '/1.0.0';
 
   static String signIn = '/signIn';
   static String resendOTP = '/resend';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../domain/core/fonts/fonts.dart';
-import '../../business_logic/bloc/on_boarding_bloc.dart';
+import '../../business_logic/bloc/on_boarding/on_boarding_bloc.dart';
 import '../widgets/onboarding_widget.dart';
 
 class OnBoardingPage extends StatelessWidget {
@@ -155,10 +155,9 @@ class PageViewWidget extends StatelessWidget {
     );
   }
 }
-// ignore: must_be_immutable
+
 class _navigationIcon extends StatelessWidget {
   _navigationIcon({
-    super.key,
     required this.navIcon,
   });
   IconData navIcon;
