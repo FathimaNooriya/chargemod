@@ -1,3 +1,4 @@
+import 'package:fathima/application/presentation/screens/otp_screen.dart';
 import 'package:fathima/domain/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
+          key: context.read<SignInBloc>().signinKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Padding(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).size.height * .18,
@@ -76,18 +79,48 @@ class _buttonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors().orange,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5))),
-          onPressed: () {},
-          child: Text(
-            "Sent OTP",
-            style: AppFonts().nornalTextWt,
-          )),
-    );
+        width: double.infinity,
+        child: BlocConsumer<SignInBloc, SignInState>(
+          listener: (context, state) {
+            if (state is OtpSuccess) {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const OtpScreen()));
+            }
+          },
+          builder: (context, state) {
+            if (state is IsLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors().orange,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5))),
+                  onPressed: () {
+                    final bool val = context
+                        .read<SignInBloc>()
+                        .signinKey
+                        .currentState!
+                        .validate();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const OtpScreen()));
+                    if (val) {
+                      context.read<SignInBloc>().add(SendOtpEvent(
+                          phone: context
+                              .read<SignInBloc>()
+                              .phoneNumController
+                              .text));
+                    }
+                  },
+                  child: Text(
+                    "Sent OTP",
+                    style: AppFonts().nornalTextWt,
+                  ));
+            }
+          },
+        ));
   }
 }
 
@@ -136,15 +169,25 @@ class _selectCountryWidget extends StatelessWidget {
           ),
         ),
         SizedBox(
-            width: MediaQuery.of(context).size.width * .65,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.call),
-                  hintText: "Enter phone number",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5))),
-            )),
+          width: MediaQuery.of(context).size.width * .65,
+          child: TextFormField(
+            controller: context.read<SignInBloc>().phoneNumController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.call),
+                hintText: "Enter phone number",
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Enter phone number";
+              } else if (value.length < 10 || value.length > 10) {
+                return "Enter a valid phone number";
+              }
+              return null;
+            },
+          ),
+        ),
       ],
     );
   }

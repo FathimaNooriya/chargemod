@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../domain/models/authorization/authorization.dart';
 import '../../../../domain/repositories/resendotp_repository.dart';
 import '../../../../domain/repositories/signin_repository.dart';
@@ -12,6 +11,8 @@ part 'sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final countryPicker = const FlCountryCodePicker();
+  final TextEditingController phoneNumController = TextEditingController();
+  final GlobalKey<FormState> signinKey = GlobalKey<FormState>();
   CountryCode? countryCode;
   SignInBloc() : super(SignInInitial()) {
     on<SendOtpEvent>(sendOtpEvent);
@@ -21,6 +22,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
   Future<void> sendOtpEvent(
       SendOtpEvent event, Emitter<SignInState> emit) async {
+    emit(IsLoading());
     String? result = await SigninRepasitory().signIn(event.phone);
     if (result == "Success") {
       emit(OtpSuccess());
@@ -31,6 +33,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Future<void> resendOtpEvent(
       ResendOtpEvent event, Emitter<SignInState> emit) async {
+    emit(IsLoading());
     String? result = await ResendOtpRepository().resendOTP(event.phone);
     if (result == "Success") {
       emit(OtpSuccess());
@@ -41,6 +44,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Future<void> verifyOtpEvent(
       VerifyOtpEvent event, Emitter<SignInState> emit) async {
+    emit(IsLoading());
     AuthorizationModel? result =
         await VerityOtpRepository().verifyOTP(event.phone, event.otp);
     if (result == null) {
